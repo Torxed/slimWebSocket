@@ -83,4 +83,4 @@ class SimplifiedWebSocket {
 	}
 }
 
-window['SimplifiedWebSocket'] = SimplifiedWebSocket;
+window.slimWebSocket = SimplifiedWebSocket;
