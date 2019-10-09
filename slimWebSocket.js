@@ -1,4 +1,4 @@
-export class SimplifiedWebSocket {
+class SimplifiedWebSocket {
 	constructor(url='wss://obtain.life', connect_func=null, message_func=null, close_func=null) {
 		let self = this; // Plaeholder for anon functions
 		if(!connect_func) {
@@ -82,3 +82,5 @@ export class SimplifiedWebSocket {
 		this.dispatch_send();
 	}
 }
+
+window['SimplifiedWebSocket'] = SimplifiedWebSocket;
