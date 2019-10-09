@@ -1,4 +1,4 @@
-class SimplifiedWebSocket {
+export class SimplifiedWebSocket {
 	constructor(url='wss://obtain.life', connect_func=null, message_func=null, close_func=null) {
 		let self = this; // Plaeholder for anon functions
 		if(!connect_func) {
