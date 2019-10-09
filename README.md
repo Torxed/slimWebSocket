@@ -38,9 +38,9 @@ A wrapper around WebSocket for JavaScript
 	xhr.onreadystatechange = function() {
 		if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
 			script.innerHTML = this.responseText;
-    		document.head.appendChild(script);
+			document.head.appendChild(script);
 
-    		socket = new slimWebSocket();
+			socket = new slimWebSocket();
 		}
 	}
 	xhr.send();
