@@ -31,9 +31,9 @@ A wrapper around WebSocket for JavaScript
 	//
 	// #LoadingScriptsFromGithub
 	var script = document.createElement('script');
-    script.type = 'text/javascript';
+	script.type = 'text/javascript';
 
-    let xhr = new XMLHttpRequest();
+	let xhr = new XMLHttpRequest();
 	xhr.open("GET", 'https://raw.githubusercontent.com/Torxed/slimWebSocket/master/slimWebSocket.js', true);
 	xhr.onreadystatechange = function() {
 		if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
