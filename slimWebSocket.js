@@ -3,13 +3,13 @@ class SimplifiedWebSocket {
 		let self = this; // Plaeholder for anon functions
 		if(!connect_func) {
 			connect_func = function(event) {
-				console.log("WebSocket Connected!");
+				//TODO: Debug variable: console.log("WebSocket Connected!");
 				self.dispatch_send();
 			}
 		}
 		if(!close_func) {
 			close_func = function (event) {
-				console.log("WebSocket closed!");
+				//TODO: Debug variable: console.log("WebSocket closed!");
 				if(self.last_message) {
 					self.send_queue.push(self.last_message);
 					self.last_message = null;
@@ -30,8 +30,8 @@ class SimplifiedWebSocket {
 						//console.log(err);
 					}
 				}
-				console.log("WebSocket got data:");
-				console.log(data);
+				//TODO: Debug variable: console.log("WebSocket got data:");
+				//TODO: Debug variable: console.log(data);
 			}
 		}
 
