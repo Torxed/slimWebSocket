@@ -5,7 +5,7 @@ A wrapper around WebSocket for JavaScript
 
 ```html
 <script>
-	socket = new slimWebSocket();
+	let socket = new slimWebSocket('wss://obtain.life');
 	
 	socket.send({"test" : "ping"});
 </script>
