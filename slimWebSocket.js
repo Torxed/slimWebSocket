@@ -1,3 +1,19 @@
+let timers = {};
+let send_queue = [];
+let resource_handlers = {};
+function setTimer(name, func, time=10) {
+	timers[name] = setInterval(func, time);
+}
+
+function clearTimer(name) {
+	if(isset(timers[name])) {
+		window.clearInterval(timers[name]);
+		delete(timers[name]);
+		return true;
+	}
+	return false;
+}
+
 class SimplifiedWebSocket {
 	constructor(url='wss://obtain.life', connect_func=null, message_func=null, close_func=null) {
 		let self = this; // Plaeholder for anon functions
