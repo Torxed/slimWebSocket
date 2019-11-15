@@ -14,6 +14,12 @@ function clearTimer(name) {
 	return false;
 }
 
+function isset(obj) {
+	if(typeof obj !== 'undefined')
+		return true;
+	return false;
+}
+
 class SimplifiedWebSocket {
 	constructor(url='wss://obtain.life', connect_func=null, message_func=null, close_func=null) {
 		let self = this; // Plaeholder for anon functions
