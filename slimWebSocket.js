@@ -51,6 +51,14 @@ class SimplifiedWebSocket {
 					} catch(err) {
 						//console.log(err);
 					}
+					Object.keys(data).forEach((key) => {
+						if(typeof resource_handlers[key] !== 'undefined')
+							resource_handlers[key](data);
+						else if(typeof resource_handlers[data[key]] !== 'undefined')
+							resource_handlers[data[key]](data);
+						else
+							console.warn('No handler registered for data:', data)
+					})
 				}
 				//TODO: Debug variable: console.log("WebSocket got data:");
 				//TODO: Debug variable: console.log(data);
@@ -102,6 +110,10 @@ class SimplifiedWebSocket {
 			data = JSON.stringify(data);
 		this.send_queue.push(data);
 		this.dispatch_send();
+	}
+
+	subscribe(event, func) {
+		resource_handlers[event] = func
 	}
 }
 
