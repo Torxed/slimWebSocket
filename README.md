@@ -30,13 +30,13 @@ A wrapper around WebSocket for JavaScript
 	// which causes the browser to parse it, but not as a forrain object.
 	//
 	// #LoadingScriptsFromGithub
-	var script = document.createElement('script');
-	script.type = 'text/javascript';
 
 	let xhr = new XMLHttpRequest();
 	xhr.open("GET", 'https://raw.githubusercontent.com/Torxed/slimWebSocket/master/slimWebSocket.js', true);
 	xhr.onreadystatechange = function() {
 		if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+			let script = document.createElement('script');
+			script.type = 'text/javascript';
 			script.innerHTML = this.responseText;
 			document.head.appendChild(script);
 
