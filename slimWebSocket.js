@@ -51,14 +51,25 @@ class SimplifiedWebSocket {
 					} catch(err) {
 						//console.log(err);
 					}
+
+					let parsed = false;
 					Object.keys(data).forEach((key) => {
-						if(typeof resource_handlers[key] !== 'undefined')
-							resource_handlers[key](data);
-						else if(typeof resource_handlers[data[key]] !== 'undefined')
-							resource_handlers[data[key]](data);
-						else
-							console.warn('No handler registered for data:', data)
+						if(!parsed) {
+							if(typeof resource_handlers[key] !== 'undefined') {
+								resource_handlers[key](data);
+								parsed = true;
+								return;
+							} else if(typeof resource_handlers[data[key]] !== 'undefined') {
+								resource_handlers[data[key]](data);
+								parsed = true;
+								return;
+							}
+						} else {
+							return;
+						}
 					})
+					if(!parsed)
+						console.warn('No handler registered for data:', data)
 				}
 				//TODO: Debug variable: console.log("WebSocket got data:");
 				//TODO: Debug variable: console.log(data);
@@ -81,6 +92,7 @@ class SimplifiedWebSocket {
 		this.url = url;
 		this.connect();
 	}
+
 
 	dispatch_send() {
 		let self = this;
@@ -110,6 +122,10 @@ class SimplifiedWebSocket {
 			data = JSON.stringify(data);
 		this.send_queue.push(data);
 		this.dispatch_send();
+	}
+
+	clear_subscribers() {
+		resource_handlers = {};
 	}
 
 	subscribe(event, func) {
