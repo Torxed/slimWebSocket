@@ -1,14 +1,12 @@
-let timers = {};
-let send_queue = [];
-let resource_handlers = {};
+let slimWebSocket_timers = {};
 function setTimer(name, func, time=10) {
-	timers[name] = setInterval(func, time);
+	slimWebSocket_timers[name] = setInterval(func, time);
 }
 
 function clearTimer(name) {
-	if(isset(timers[name])) {
-		window.clearInterval(timers[name]);
-		delete(timers[name]);
+	if(isset(slimWebSocket_timers[name])) {
+		window.clearInterval(slimWebSocket_timers[name]);
+		delete(slimWebSocket_timers[name]);
 		return true;
 	}
 	return false;
@@ -24,6 +22,7 @@ class SimplifiedWebSocket {
 	constructor(url='wss://obtain.life', connect_func=null, message_func=null, close_func=null) {
 		let self = this; // Plaeholder for anon functions
 		self.debug = false;
+		self.resource_handlers = {};
 		if(!connect_func) {
 			connect_func = function(event) {
 				//TODO: Debug variable: console.log("WebSocket Connected!");
@@ -38,7 +37,7 @@ class SimplifiedWebSocket {
 					self.last_message = null;
 				}
 				self.socket.close();
-				self.timers['reconnecting'] = setTimeout(function() {
+				self.slimWebSocket_timers['reconnecting'] = setTimeout(function() {
 					self.connect();
 				}, 500);
 			}
@@ -59,15 +58,15 @@ class SimplifiedWebSocket {
 
 					Object.keys(data).forEach((key) => {
 						if(!parsed) {
-							if(typeof resource_handlers[key] !== 'undefined') {
+							if(typeof this.resource_handlers[key] !== 'undefined') {
 								//console.log('Trigger on key:', resource_handlers[key])
-								parsed = resource_handlers[key].forEach((f) => {
+								parsed = this.resource_handlers[key].forEach((f) => {
 									f(data)
 								});
 								return;
-							} else if(typeof resource_handlers[data[key]] !== 'undefined') {
+							} else if(typeof this.resource_handlers[data[key]] !== 'undefined') {
 								//console.log('Trigger on data:', resource_handlers[data[key]])
-								parsed = resource_handlers[data[key]].forEach((f) => {
+								parsed = this.resource_handlers[data[key]].forEach((f) => {
 									f(data)
 								});
 								return;
@@ -112,7 +111,7 @@ class SimplifiedWebSocket {
 				if (this.debug)
 					console.log('Sent:', data);
 			} else {
-				this.timers['resend'] = setTimeout(function() {
+				this.slimWebSocket_timers['resend'] = setTimeout(function() {
 					self.dispatch_send();
 					clearTimer('resend');
 				}, 25)
@@ -135,14 +134,14 @@ class SimplifiedWebSocket {
 	}
 
 	clear_subscribers() {
-		resource_handlers = {};
+		this.resource_handlers = {};
 	}
 
 	subscribe(event, func) {
-		if(typeof resource_handlers[event] === 'undefined')
-			resource_handlers[event] = [func]
+		if(typeof this.resource_handlers[event] === 'undefined')
+			this.resource_handlers[event] = [func]
 		else 
-			resource_handlers[event].push(func)
+			this.resource_handlers[event].push(func)
 	}
 }
 
