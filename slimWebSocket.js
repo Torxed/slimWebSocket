@@ -1,17 +1,3 @@
-let slimWebSocket_timers = {};
-function setTimer(name, func, time=10) {
-	slimWebSocket_timers[name] = setInterval(func, time);
-}
-
-function clearTimer(name) {
-	if(isset(slimWebSocket_timers[name])) {
-		window.clearInterval(slimWebSocket_timers[name]);
-		delete(slimWebSocket_timers[name]);
-		return true;
-	}
-	return false;
-}
-
 function isset(obj) {
 	if(typeof obj !== 'undefined')
 		return true;
@@ -23,6 +9,7 @@ class SimplifiedWebSocket {
 		let self = this; // Plaeholder for anon functions
 		self.debug = false;
 		self.resource_handlers = {};
+		self.timers = {};
 		if(!connect_func) {
 			connect_func = function(event) {
 				//TODO: Debug variable: console.log("WebSocket Connected!");
@@ -37,7 +24,7 @@ class SimplifiedWebSocket {
 					self.last_message = null;
 				}
 				self.socket.close();
-				self.slimWebSocket_timers['reconnecting'] = setTimeout(function() {
+				self.timers['reconnecting'] = setTimeout(function() {
 					self.connect();
 				}, 500);
 			}
@@ -83,6 +70,19 @@ class SimplifiedWebSocket {
 			}
 		}
 
+		function setTimer(name, func, time=10) {
+			timers[name] = setInterval(func, time);
+		}
+
+		function clearTimer(name) {
+			if(isset(timers[name])) {
+				window.clearInterval(timers[name]);
+				delete(timers[name]);
+				return true;
+			}
+			return false;
+		}
+
 		this.connect_func = function(event) {
 			connect_func.call(self, event);
 		}
@@ -111,9 +111,9 @@ class SimplifiedWebSocket {
 				if (this.debug)
 					console.log('Sent:', data);
 			} else {
-				this.slimWebSocket_timers['resend'] = setTimeout(function() {
+				this.timers['resend'] = setTimeout(function() {
 					self.dispatch_send();
-					clearTimer('resend');
+					this.clearTimer('resend');
 				}, 25)
 			}
 		}
