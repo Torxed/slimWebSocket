@@ -111,7 +111,7 @@ class SimplifiedWebSocket {
 				if (this.debug)
 					console.log('Sent:', data);
 			} else {
-				this.timers['resend'] = setTimeout(function() {
+				this.timers['resend'] = setTimeout(() => {
 					self.dispatch_send();
 					this.clearTimer('resend');
 				}, 25)
