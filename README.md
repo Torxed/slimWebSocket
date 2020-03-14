@@ -7,6 +7,9 @@ A wrapper around WebSocket for JavaScript
 <script>
 	let socket = new slimWebSocket('wss://obtain.life');
 	
+	socket.subscribe('certain_key', (json) => {
+		console.log('Got data containing certain_key:', json);
+	})
 	socket.send({"test" : "ping"});
 </script>
 ```
