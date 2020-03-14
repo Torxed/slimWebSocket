@@ -148,6 +148,13 @@ class SimplifiedWebSocket {
 	has_subscription(event) {
 		return typeof this.resource_handlers[event] !== 'undefined'
 	}
+
+	subscriptions(event) {
+		if(typeof this.resource_handlers[event] !== 'undefined') {
+			return this.resource_handlers[event].length;
+		}
+		return 0;
+	}
 }
 
 window.slimWebSocket = SimplifiedWebSocket;
