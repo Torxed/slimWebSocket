@@ -95,7 +95,7 @@ class SimplifiedWebSocket {
 
 	clearTimer(name) {
 		if(isset(this.timers[name])) {
-			window.clearInterval(timers[name]);
+			window.clearInterval(this.timers[name]);
 			delete(this.timers[name]);
 			return true;
 		}
