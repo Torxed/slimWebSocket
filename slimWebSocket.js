@@ -144,6 +144,10 @@ class SimplifiedWebSocket {
 		else 
 			this.resource_handlers[event].push(func)
 	}
+
+	has_subscription(event) {
+		return typeof this.resource_handlers[event] !== 'undefined'
+	}
 }
 
 window.slimWebSocket = SimplifiedWebSocket;
