@@ -70,18 +70,6 @@ class SimplifiedWebSocket {
 			}
 		}
 
-		function setTimer(name, func, time=10) {
-			timers[name] = setInterval(func, time);
-		}
-
-		function clearTimer(name) {
-			if(isset(timers[name])) {
-				window.clearInterval(timers[name]);
-				delete(timers[name]);
-				return true;
-			}
-			return false;
-		}
 
 		this.connect_func = function(event) {
 			connect_func.call(self, event);
@@ -100,6 +88,19 @@ class SimplifiedWebSocket {
 		this.connect();
 	}
 
+
+	setTimer(name, func, time=10) {
+		this.timers[name] = setInterval(func, time);
+	}
+
+	clearTimer(name) {
+		if(isset(this.timers[name])) {
+			window.clearInterval(timers[name]);
+			delete(this.timers[name]);
+			return true;
+		}
+		return false;
+	}
 
 	dispatch_send() {
 		let self = this;
