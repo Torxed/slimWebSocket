@@ -7,9 +7,12 @@ function isset(obj) {
 class SimplifiedWebSocket {
 	constructor(url='wss://obtain.life', connect_func=null, message_func=null, close_func=null) {
 		let self = this; // Plaeholder for anon functions
-		self.debug = false;
-		self.resource_handlers = {};
-		self.timers = {};
+		this.debug = false;
+		this.resource_handlers = {};
+		this.timers = {};
+		this.send_queue = [];
+		this.last_message = null;
+
 		if(!connect_func) {
 			connect_func = function(event) {
 				//TODO: Debug variable: console.log("WebSocket Connected!");
@@ -40,20 +43,20 @@ class SimplifiedWebSocket {
 					}
 
 					let parsed = false;
-					if (this.debug)
+					if (self.debug)
 						console.log('Got:', data)
 
 					Object.keys(data).forEach((key) => {
 						if(!parsed) {
-							if(typeof this.resource_handlers[key] !== 'undefined') {
+							if(typeof self.resource_handlers[key] !== 'undefined') {
 								//console.log('Trigger on key:', resource_handlers[key])
-								parsed = this.resource_handlers[key].forEach((f) => {
+								parsed = self.resource_handlers[key].forEach((f) => {
 									f(data)
 								});
 								return;
-							} else if(typeof this.resource_handlers[data[key]] !== 'undefined') {
+							} else if(typeof self.resource_handlers[data[key]] !== 'undefined') {
 								//console.log('Trigger on data:', resource_handlers[data[key]])
-								parsed = this.resource_handlers[data[key]].forEach((f) => {
+								parsed = self.resource_handlers[data[key]].forEach((f) => {
 									f(data)
 								});
 								return;
@@ -80,9 +83,6 @@ class SimplifiedWebSocket {
 		this.message_func = function(event) {
 			message_func.call(self, event);
 		};
-		this.timers = {};
-		this.send_queue = [];
-		this.last_message = null;
 
 		this.url = url;
 		this.connect();
