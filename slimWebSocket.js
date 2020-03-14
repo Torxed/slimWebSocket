@@ -113,7 +113,7 @@ class SimplifiedWebSocket {
 			} else {
 				this.timers['resend'] = setTimeout(() => {
 					self.dispatch_send();
-					this.clearTimer('resend');
+					self.clearTimer('resend');
 				}, 25)
 			}
 		}
