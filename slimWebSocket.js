@@ -50,14 +50,14 @@ class SimplifiedWebSocket {
 						if(!parsed) {
 							if(typeof self.resource_handlers[key] !== 'undefined') {
 								//console.log('Trigger on key:', resource_handlers[key])
-								parsed = self.resource_handlers[key].forEach((f) => {
-									f(data)
+								self.resource_handlers[key].forEach((f) => {
+									parsed = f(data)
 								});
 								return;
 							} else if(typeof self.resource_handlers[data[key]] !== 'undefined') {
 								//console.log('Trigger on data:', resource_handlers[data[key]])
-								parsed = self.resource_handlers[data[key]].forEach((f) => {
-									f(data)
+								self.resource_handlers[data[key]].forEach((f) => {
+									parsed = f(data)
 								});
 								return;
 							}
