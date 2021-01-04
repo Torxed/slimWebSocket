@@ -9,6 +9,7 @@ class SimplifiedWebSocket {
 		let self = this; // Plaeholder for anon functions
 		this.debug = false;
 		this.resource_handlers = {};
+		this.one_shot_handlers = {};
 		this.timers = {};
 		this.send_queue = [];
 		this.last_message = null;
@@ -59,6 +60,18 @@ class SimplifiedWebSocket {
 								self.resource_handlers[data[key]].forEach((f) => {
 									parsed = f(data)
 								});
+								return;
+							} else if(typeof self.one_shot_handlers[key] !== 'undefined') {
+								self.one_shot_handlers[key].forEach((f) => {
+									parsed = f(data);
+								});
+								delete self.one_shot_handlers[key];
+								return;
+							} else if(typeof self.one_shot_handlers[data[key]] !== 'undefined') {
+								self.one_shot_handlers[data[key]].forEach((f) => {
+									parsed = f(data);
+								});
+								delete self.one_shot_handlers[data[key]];
 								return;
 							}
 						} else {
@@ -136,6 +149,7 @@ class SimplifiedWebSocket {
 
 	clear_subscribers() {
 		this.resource_handlers = {};
+		this.one_shot_handlers = {};
 	}
 
 	subscribe(event, func) {
@@ -145,13 +159,27 @@ class SimplifiedWebSocket {
 			this.resource_handlers[event].push(func)
 	}
 
+	subscribe_once(event, func) {
+		if(typeof this.one_shot_handlers[event] === 'undefined')
+			this.one_shot_handlers[event] = [func]
+		else 
+			this.one_shot_handlers[event].push(func)
+	}
+
 	has_subscription(event) {
-		return typeof this.resource_handlers[event] !== 'undefined'
+		if (typeof this.resource_handlers[event] !== 'undefined')
+			return true;
+		else if (typeof this.one_shot_handlers[event] !== 'undefined')
+			return true;
+		else
+			return false;
 	}
 
 	subscriptions(event) {
 		if(typeof this.resource_handlers[event] !== 'undefined') {
 			return this.resource_handlers[event].length;
+		} else if (typeof this.one_shot_handlers[event] !== 'undefined') {
+			return this.one_shot_handlers[event].length;
 		}
 		return 0;
 	}
