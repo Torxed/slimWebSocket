@@ -54,28 +54,25 @@ class SimplifiedWebSocket {
 								self.resource_handlers[key].forEach((f) => {
 									parsed = f(data)
 								});
-								return;
 							} else if(typeof self.resource_handlers[data[key]] !== 'undefined') {
 								//console.log('Trigger on data:', resource_handlers[data[key]])
 								self.resource_handlers[data[key]].forEach((f) => {
 									parsed = f(data)
 								});
-								return;
-							} else if(typeof self.one_shot_handlers[key] !== 'undefined') {
-								self.one_shot_handlers[key].forEach((f) => {
-									parsed = f(data);
-								});
-								delete self.one_shot_handlers[key];
-								return;
-							} else if(typeof self.one_shot_handlers[data[key]] !== 'undefined') {
-								self.one_shot_handlers[data[key]].forEach((f) => {
-									parsed = f(data);
-								});
-								delete self.one_shot_handlers[data[key]];
-								return;
 							}
-						} else {
-							return;
+						}// else {
+						//	return;
+						//}
+						if(typeof self.one_shot_handlers[key] !== 'undefined') {
+							self.one_shot_handlers[key].forEach((f) => {
+								parsed = f(data);
+							});
+							delete self.one_shot_handlers[key];
+						} else if(typeof self.one_shot_handlers[data[key]] !== 'undefined') {
+							self.one_shot_handlers[data[key]].forEach((f) => {
+								parsed = f(data);
+							});
+							delete self.one_shot_handlers[data[key]];
 						}
 					})
 					if(!parsed)
